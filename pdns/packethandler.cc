@@ -1288,6 +1288,9 @@ void PacketHandler::completeANYRecords(DNSPacket& p, std::unique_ptr<DNSPacket>&
 
 bool PacketHandler::tryAuthSignal(DNSPacket& p, std::unique_ptr<DNSPacket>& r, DNSName &target) {
   DLOG(g_log<<Logger::Warning<<"Let's try authenticated DNSSEC bootstrapping ..."<<endl);
+  if(!d_dk.isSignalingZone(d_sd.qname)) {
+    return false;
+  }
 
   // Check for prefix mismatch
   if(target.getRawLabel(0) != "_dsboot") {
